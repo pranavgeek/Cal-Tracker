@@ -16,7 +16,7 @@ Quickly find and log your favorite foods with our powerful search functionality.
 Enable users to create new enteies for meals and view them in a log or diary format.
 
 ### 3.Editing and Deleting Entries
-ALlow users to edit and delete entries in their meal log for accuracy.
+Allow users to edit and delete entries in their meal log for accuracy.
 
 ### 4.Deleting User Data
 Implement a feature that enables users to delete all their data if they wish
@@ -27,6 +27,10 @@ Present data in visually informative ways, such as color-coding text or displayi
 ### 6. Notification
 Displaying notification for important event like reminding users to log their meals or celebrating achievements.
 
+### 7. Dark Mode
+Enable a dark mode option for users who prefer a more comfortable and less straining interface, especially during low-light conditions.
+
+### 8. 
 
 
 
