@@ -18,14 +18,14 @@ Enable users to create new enteies for meals and view them in a log or diary for
 ### 3.Editing and Deleting Entries
 Allow users to edit and delete entries in their meal log for accuracy.
 
-### 4.Deleting User Data
+### 4. Updating App Preferences:
+Include settings that allow users to customize their experience, such as enabling dark mode or adjusting notification preferences.
+
+### 5. Deleting User Data
 Implement a feature that enables users to delete all their data if they wish.
 
-### 5.Displaying data in useful ways
+### 6. Displaying data in useful ways
 Present data in visually informative ways, such as color-coding text or displaying graphs to show trends in calorie intake or weight.
-
-### 6. Notification
-Displaying notification for important event like reminding users to log their meals or celebrating achievements.
 
 ### 7. Meal Time Reminders
 Implement reminders for regular meal times, encouraging users to maintain a consistent eating schedule throughout the day.
