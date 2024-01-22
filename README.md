@@ -19,18 +19,21 @@ Enable users to create new enteies for meals and view them in a log or diary for
 Allow users to edit and delete entries in their meal log for accuracy.
 
 ### 4.Deleting User Data
-Implement a feature that enables users to delete all their data if they wish
+Implement a feature that enables users to delete all their data if they wish.
 
 ### 5.Displaying data in useful ways
-Present data in visually informative ways, such as color-coding text or displaying graphs to show trends in calorie intake or weight
+Present data in visually informative ways, such as color-coding text or displaying graphs to show trends in calorie intake or weight.
 
 ### 6. Notification
 Displaying notification for important event like reminding users to log their meals or celebrating achievements.
 
-### 7. Dark Mode
+### 7. Meal Time Reminders
+Implement reminders for regular meal times, encouraging users to maintain a consistent eating schedule throughout the day.
+
+### 8. Dark Mode
 Enable a dark mode option for users who prefer a more comfortable and less straining interface, especially during low-light conditions.
 
-### 8. 
+
 
 
 
