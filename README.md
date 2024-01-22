@@ -1,1 +1,2 @@
-Calories Hunt App
+Calorie Hunt App
+
