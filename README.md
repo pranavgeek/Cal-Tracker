@@ -1,1 +1,1 @@
-Calories Tracker App
+Calories Hunt App
