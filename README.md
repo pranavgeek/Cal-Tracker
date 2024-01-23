@@ -27,8 +27,7 @@ Implement a feature that enables users to delete all their data if they wish.
 ### 6. Displaying data in useful ways:
 Present data in visually informative ways, such as color-coding text or displaying graphs to show trends in calorie intake or weight.
 
-### 7. Meal Time Reminders:
-Implement reminders for regular meal times, encouraging users to maintain a consistent eating schedule throughout the day.
+
 
 
 
