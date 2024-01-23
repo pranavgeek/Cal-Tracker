@@ -10,7 +10,7 @@ Welcome to CalorieHunt,crafted with cross-platform convenience in React Native -
 ## Features
 
 ### 1. Search Functionality:
-Quickly find and log your favorite foods with our powerful search functionality. Effortlessly discover nutritional information for a wide range of food items.
+User can quickly find and log your favorite foods with our powerful search functionality. Effortlessly discover nutritional information for a wide range of food items.
 
 ### 2. Creating and Viewing Entries:
 Enable users to create new enteies for meals and view them in a log or diary format.
