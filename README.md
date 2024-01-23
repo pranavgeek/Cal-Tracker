@@ -5,7 +5,7 @@ Welcome to CalorieHunt,crafted with cross-platform convenience in React Native -
 ## Group 13
 
 - Pranav Kalpeshkumar Gotawala
-- AnilKumar Dantani
+- Anilkumar Amaratbhai Dantani
 
 ## Features
 
