@@ -1,10 +1,12 @@
 // App.js
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import UserInputScreen from './components/UserInputScreen';
-import MainAppScreen from './components/MainAppScreen';
+import React, { useState, useEffect } from "react";
+import { TouchableOpacity, Text } from "react-native"; // Update the imports
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import UserInputScreen from "./components/UserInputScreen";
+import MainAppScreen from "./components/MainAppScreen";
+import MealSelectionScreen from "./components/MealSelectionScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,12 +16,12 @@ const App = () => {
   useEffect(() => {
     const checkUserDetails = async () => {
       try {
-        const userDetails = await AsyncStorage.getItem('userDetails');
+        const userDetails = await AsyncStorage.getItem("userDetails");
         if (userDetails) {
           setUserData(JSON.parse(userDetails));
         }
       } catch (error) {
-        console.error('Error checking user details:', error);
+        console.error("Error checking user details:", error);
       }
     };
 
@@ -28,10 +30,10 @@ const App = () => {
 
   const storeUserDetails = async (details) => {
     try {
-      await AsyncStorage.setItem('userDetails', JSON.stringify(details));
+      await AsyncStorage.setItem("userDetails", JSON.stringify(details));
       setUserData(details);
     } catch (error) {
-      console.error('Error storing user details:', error);
+      console.error("Error storing user details:", error);
     }
   };
 
@@ -41,19 +43,61 @@ const App = () => {
         {userData ? (
           <Stack.Screen
             name="MainAppScreen"
+            options={{
+              title: "CaloriesHunt",
+              headerLeft: null,
+              headerStyle: {
+                backgroundColor: "#FF8559",
+              },
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 30,
+                marginLeft: -170,
+              },
+            }}
             component={MainAppScreen}
             initialParams={userData}
           />
         ) : (
           <Stack.Screen
             name="UserInputScreen"
-            options={{ title: 'Enter Your Details' }}
+            options={{
+              title: "CaloriesHunt",
+              headerLeft: null,
+              headerStyle: {
+                backgroundColor: "#FF8559",
+              },
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 30,
+                marginLeft: -170,
+              },
+            }}
           >
             {(props) => (
               <UserInputScreen {...props} storeUserDetails={storeUserDetails} />
             )}
           </Stack.Screen>
         )}
+        <Stack.Screen
+          name="MealSelectionScreen"
+          component={MealSelectionScreen}
+          options={({ route, navigation }) => ({
+            title: "CaloriesHunt",
+            headerStyle: {
+              backgroundColor: "#FF8559",
+            },
+            headerTitleStyle: {
+              color: "white",
+              fontSize: 25,
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
