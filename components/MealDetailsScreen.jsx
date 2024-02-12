@@ -48,22 +48,26 @@ const MealDetailsScreen = ({ route }) => {
       if (foodDetails && mealTime) {
         // Fetch existing meals from storage
         const existingMeals = await AsyncStorage.getItem("addedMeals");
-        const meals = existingMeals ? JSON.parse(existingMeals) : {}; // Add the new meal to the specific mealTime
+        const meals = existingMeals ? JSON.parse(existingMeals) : {};
 
+        // Add the new meal to the specific mealTime
         meals[mealTime] = meals[mealTime] || [];
         meals[mealTime].push({
           name: foodDetails.description,
           nutrients: { calories: getNutrientAmount("calories") },
-        }); // Save the updated meals back to storage
+        });
 
-        await AsyncStorage.setItem("addedMeals", JSON.stringify(meals)); // Update total calories in MainAppScreen
+        // Save the updated meals back to storage
+        await AsyncStorage.setItem("addedMeals", JSON.stringify(meals));
 
+        // Update total calories in MainAppScreen
         updateTotalCalories(meals);
       }
     } catch (error) {
       console.error("Error saving added meals:", error);
-    } // Navigate to the AddedMealsScreen
+    }
 
+    // Navigate to the AddedMealsScreen
     navigation.navigate("AddedMealsScreen");
   };
 
@@ -75,36 +79,28 @@ const MealDetailsScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-            <Text style={styles.title}>Food Details</Text>
-            
+      <Text style={styles.title}>Food Details</Text>
       {foodDetails ? (
         <>
-                    <Text style={styles.title}>{foodDetails.description}</Text>
-                    
+          <Text style={styles.title}>{foodDetails.description}</Text>
           <Text style={styles.detailsColor}>{`Calories: ${getNutrientAmount(
             "calories"
           )} kcal`}</Text>
-                    
           <Text style={styles.detailsColor}>{`Protein: ${getNutrientAmount(
             "protein"
           )} g`}</Text>
-                    
           <Text style={styles.detailsColor}>{`Carbs: ${getNutrientAmount(
             "carbohydrates"
           )} g`}</Text>
-                    
           <Text style={styles.detailsColor}>{`Fat: ${getNutrientAmount(
             "fat"
           )}`}</Text>
-                    {/* Add more information as needed */}
-                    
+          {/* Add more information as needed */}
           <Button title="Add to Meal" onPress={addToMeal} />
-                  
         </>
       ) : (
         <Text>Loading...</Text>
       )}
-          
     </View>
   );
 };
