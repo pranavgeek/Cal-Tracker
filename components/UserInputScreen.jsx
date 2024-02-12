@@ -18,7 +18,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
   const [weight, setWeight] = useState("");
   const [activityLevel, setActivityLevel] = useState("");
 
-  const calculateCalories = async () => {
+  const calculateCalories = () => {
     const bmr = CaloriesCalculator.calculateBMR(
       parseInt(age),
       gender,
@@ -38,8 +38,6 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
       activityLevel,
       totalCalories,
     });
-
-    await AsyncStorage.setItem("userDetails", JSON.stringify(userDetailData));
 
     navigation.navigate("MainAppScreen", { totalCalories });
   };
