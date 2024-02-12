@@ -36,7 +36,7 @@ const AddedMealsScreen = ({ route }) => {
         setLoadedMeals(parsedMeals);
       }
     } catch (error) {
-      console.error("Error removing meal:", error);
+      console.error("Error while removing meal:", error);
     }
   };
 
