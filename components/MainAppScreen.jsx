@@ -104,6 +104,9 @@ const MainAppScreen = ({ route, navigation }) => {
       <TouchableOpacity onPress={viewAddedMeals} style={styles.viewMealsButton}>
         <Text style={styles.viewMealsButtonText}>View Added Meals</Text>
       </TouchableOpacity>
+      {/* <TouchableOpacity onPress={resetUserDetails} style={styles.viewMealsButton}>
+        <Text style={styles.viewMealsButtonText}>Reset</Text>
+      </TouchableOpacity> */}
     </View>
   );
 };
