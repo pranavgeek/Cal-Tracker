@@ -46,7 +46,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>User Information</Text>
+      <Text style={styles.title}>Personal Information</Text>
 
       <Text style={styles.inputLabel}>What's your age?</Text>
       <TextInput
