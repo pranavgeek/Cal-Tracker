@@ -7,6 +7,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserInputScreen from "./components/UserInputScreen";
 import MainAppScreen from "./components/MainAppScreen";
 import MealSelectionScreen from "./components/MealSelectionScreen";
+import MealDetailsScreen from "./components/MealDetailsScreen";
+import AddedMealsScreen from "./components/AddedMealsScreen";
 
 const Stack = createStackNavigator();
 
@@ -82,6 +84,44 @@ const App = () => {
         <Stack.Screen
           name="MealSelectionScreen"
           component={MealSelectionScreen}
+          options={({ route, navigation }) => ({
+            title: "CaloriesHunt",
+            headerStyle: {
+              backgroundColor: "#FF8559",
+            },
+            headerTitleStyle: {
+              color: "white",
+              fontSize: 25,
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="MealDetailsScreen"
+          component={MealDetailsScreen}
+          options={({ route, navigation }) => ({
+            title: "CaloriesHunt",
+            headerStyle: {
+              backgroundColor: "#FF8559",
+            },
+            headerTitleStyle: {
+              color: "white",
+              fontSize: 25,
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="AddedMealsScreen"
+          component={AddedMealsScreen}
           options={({ route, navigation }) => ({
             title: "CaloriesHunt",
             headerStyle: {
