@@ -21,7 +21,7 @@ const AddedMealsScreen = ({ route }) => {
         setLoadedMeals(filteredMeals);
       }
     } catch (error) {
-      console.error("Error loading added meals:", error);
+      
     }
   };
 
