@@ -26,6 +26,7 @@ const AddedMealsScreen = ({ route }) => {
 
   //This function remove's the meals
   const removeMeal = async (mealTime) => {
+    try {
       const savedMeals = await AsyncStorage.getItem("addedMeals");
       if (savedMeals) {
         const parsedMeals = JSON.parse(savedMeals);
