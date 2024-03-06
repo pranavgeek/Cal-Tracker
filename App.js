@@ -1,6 +1,5 @@
-// App.js
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Text } from "react-native"; // Update the imports
+import { TouchableOpacity, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,6 +8,7 @@ import MainAppScreen from "./components/MainAppScreen";
 import MealSelectionScreen from "./components/MealSelectionScreen";
 import MealDetailsScreen from "./components/MealDetailsScreen";
 import AddedMealsScreen from "./components/AddedMealsScreen";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator();
 
@@ -40,106 +40,111 @@ const App = () => {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {userData ? (
+      <NavigationContainer>
+        <Stack.Navigator>
+          {userData ? (
+            <Stack.Screen
+              name="MainAppScreen"
+              options={{
+                title: "CaloriesHunt",
+                headerLeft: null,
+                headerStyle: {
+                  backgroundColor: "#FF8559",
+                },
+                headerTitleStyle: {
+                  color: "white",
+                  fontSize: 30,
+                  marginLeft: -170,
+                },
+              }}
+              component={MainAppScreen}
+              initialParams={userData}
+            />
+          ) : (
+            <Stack.Screen
+              name="UserInputScreen"
+              options={{
+                title: "CaloriesHunt",
+                headerLeft: null,
+                headerStyle: {
+                  backgroundColor: "#FF8559",
+                },
+                headerTitleStyle: {
+                  color: "white",
+                  fontSize: 30,
+                  marginLeft: -170,
+                },
+              }}
+            >
+              {(props) => (
+                <UserInputScreen {...props} storeUserDetails={storeUserDetails} />
+              )}
+            </Stack.Screen>
+          )}
           <Stack.Screen
-            name="MainAppScreen"
-            options={{
+            name="MealSelectionScreen"
+            component={MealSelectionScreen}
+            options={({ route, navigation }) => ({
               title: "CaloriesHunt",
-              headerLeft: null,
               headerStyle: {
                 backgroundColor: "#FF8559",
               },
               headerTitleStyle: {
                 color: "white",
-                fontSize: 30,
-                marginLeft: -170,
+                fontSize: 25,
               },
-            }}
-            component={MainAppScreen}
-            initialParams={userData}
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
+                </TouchableOpacity>
+              ),
+            })}
           />
-        ) : (
           <Stack.Screen
-            name="UserInputScreen"
-            options={{
+            name="MealDetailsScreen"
+            component={MealDetailsScreen}
+            options={({ route, navigation }) => ({
               title: "CaloriesHunt",
-              headerLeft: null,
               headerStyle: {
                 backgroundColor: "#FF8559",
               },
               headerTitleStyle: {
                 color: "white",
-                fontSize: 30,
-                marginLeft: -170,
+                fontSize: 25,
               },
-            }}
-          >
-            {(props) => (
-              <UserInputScreen {...props} storeUserDetails={storeUserDetails} />
-            )}
-          </Stack.Screen>
-        )}
-        <Stack.Screen
-          name="MealSelectionScreen"
-          component={MealSelectionScreen}
-          options={({ route, navigation }) => ({
-            title: "CaloriesHunt",
-            headerStyle: {
-              backgroundColor: "#FF8559",
-            },
-            headerTitleStyle: {
-              color: "white",
-              fontSize: 25,
-            },
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="MealDetailsScreen"
-          component={MealDetailsScreen}
-          options={({ route, navigation }) => ({
-            title: "CaloriesHunt",
-            headerStyle: {
-              backgroundColor: "#FF8559",
-            },
-            headerTitleStyle: {
-              color: "white",
-              fontSize: 25,
-            },
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="AddedMealsScreen"
-          component={AddedMealsScreen}
-          options={({ route, navigation }) => ({
-            title: "CaloriesHunt",
-            headerStyle: {
-              backgroundColor: "#FF8559",
-            },
-            headerTitleStyle: {
-              color: "white",
-              fontSize: 25,
-            },
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
-              </TouchableOpacity>
-            ),
-          })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="AddedMealsScreen"
+            component={AddedMealsScreen}
+            options={({ route, navigation }) => ({
+              title: "CaloriesHunt",
+              headerStyle: {
+                backgroundColor: "#FF8559",
+              },
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 25,
+              },
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Text style={{ color: "white", marginLeft: 20, fontSize: 30, color: 'black' }}>&#9664;</Text>
+                </TouchableOpacity>
+              ),
+              headerRight: () => (
+                <TouchableOpacity onPress={() => navigation.navigate("MainAppScreen")}>
+                  <Icon name="home" size={25} color="black" style={{marginRight: 20}}/>
+                </TouchableOpacity>
+              )
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
   );
 };
 

@@ -1,8 +1,16 @@
 // components/MainAppScreen.js
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Modal, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from "react-native";
 import MealSelectionScreen from "./MealSelectionScreen";
 import AddedMealsScreen from "./AddedMealsScreen";
+// import CalorieProgressBar from "./CalorieProgressBar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MainAppScreen = ({ route, navigation }) => {
@@ -21,38 +29,39 @@ const MainAppScreen = ({ route, navigation }) => {
   };
 
   const viewAddedMeals = () => {
-    navigation.navigate('AddedMealsScreen');
+    navigation.navigate("AddedMealsScreen", { updateTotalCalories });
   };
 
   const updateTotalCalories = (meals) => {
     // Calculate consumed calories from meals and update consumedCalories state
     let consumed = 0;
-    Object.values(meals).forEach(mealArray => {
-      mealArray.forEach(meal => {
+    Object.values(meals).forEach((mealArray) => {
+      mealArray.forEach((meal) => {
         consumed += meal.nutrients?.calories || 0;
       });
     });
-    setConsumedCalories(consumed);
+    setConsumedCalories(Math.floor(consumed));
   };
 
   const remainingCalories = totalCalories - consumedCalories;
+  const removeMealCal = remainingCalories + consumedCalories
 
   //Reset Data
   const resetUserDetails = async () => {
     try {
-      await AsyncStorage.removeItem('userDetails');
-      navigation.replace('UserInputScreen')
+      await AsyncStorage.removeItem("userDetails");
+      navigation.replace("UserInputScreen");
     } catch (error) {
-      console.error('Error clearing user details:', error);
+      console.error("Error clearing user details:", error);
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.Nutrition}>Nutrition</Text>
       <View style={styles.nutritionContainer}>
         <Text style={styles.caloriesText}>
-          Eat up to {remainingCalories > 0 ? remainingCalories : 0} cal
+          Eat up to {remainingCalories > 0 ? remainingCalories || removeMealCal : 0} cal
         </Text>
         <TouchableOpacity
           onPress={() => {

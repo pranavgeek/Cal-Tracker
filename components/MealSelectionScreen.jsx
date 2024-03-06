@@ -12,7 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 const MealSelectionScreen = ({ route }) => {
   const navigation = useNavigation();
   const { meal, mealTime, updateTotalCalories } = route.params;
-  const showMeal = true;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
@@ -37,16 +36,13 @@ const MealSelectionScreen = ({ route }) => {
   };
 
   const handleAddFood = (selectedFood) => {
-    // Fetch detailed information for the selected food
     if (selectedFood.fdcId) {
-      navigation.navigate("MealDetailsScreen", {
-        fdcId: selectedFood.fdcId,
-        mealTime: meal,
-        updateTotalCalories: updateTotalCalories,
-      });
+        navigation.navigate("MealDetailsScreen", {
+          fdcId: selectedFood.fdcId,
+          mealTime: route.params.mealTime || meal,
+          updateTotalCalories: updateTotalCalories,
+        });
     }
-
-    console.log(`Selected food: ${selectedFood.description}`);
   };
 
   useEffect(() => {
@@ -55,12 +51,11 @@ const MealSelectionScreen = ({ route }) => {
     }
   }, [searchQuery]);
 
+  const title = `Search for ${meal ? `${meal} items` : mealTime ? `${mealTime} items` : "items"}`;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Search for{" "}
-        {meal ? `${meal} items` : mealTime ? `${mealTime} items` : "items"}
-      </Text>
+      <Text style={styles.title}>{title}</Text>
 
       <TextInput
         placeholder="Search for food..."
@@ -117,6 +112,24 @@ const styles = StyleSheet.create({
   resultItemText: {
     fontSize: 18,
     color: "white",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  confirmButton: {
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
   },
 });
 
