@@ -1,3 +1,4 @@
+//Added meal screen
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -49,6 +50,7 @@ const AddedMealsScreen = ({ route }) => {
       parsedMeals[editMeal] = updatedMeals;
 
       await AsyncStorage.setItem("addedMeals", JSON.stringify(parsedMeals));
+
       // Update total calories in MainAppScreen for meal removal
     if (route.params.updateTotalCalories) {
       route.params.updateTotalCalories(parsedMeals, mealToRemove.nutrients?.calories || 0);
