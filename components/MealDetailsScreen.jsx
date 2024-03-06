@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -43,11 +43,50 @@ const MealDetailsScreen = ({ route }) => {
     }
   };
 
+  const getCalorieColor = (nutrientKey) => {
+    const nutrientAmount = parseFloat(getNutrientAmount(nutrientKey));
+
+    if (nutrientKey === "calories") {
+      if (nutrientAmount <= 200) {
+        return { backgroundColor: "#4CAF50", color: "white" }; // Green
+      } else if (nutrientAmount <= 500) {
+        return { backgroundColor: "#FFC107", color: "black" }; // Orange
+      } else {
+        return { backgroundColor: "#FF5252", color: "white" }; // Red
+      }
+    } else if (nutrientKey === "protein") {
+      if (nutrientAmount <= 10) {
+        return { backgroundColor: "#FF5252", color: "white" }; // Red
+      } else if (nutrientAmount <= 20) {
+        return { backgroundColor: "#FFC107", color: "black" }; // Orange
+      } else {
+        return { backgroundColor: "#4CAF50", color: "white" }; // Green
+      }
+    } else if (nutrientKey === "carbohydrates") {
+      if (nutrientAmount <= 30) {
+        return { backgroundColor: "#264653", color: "white" }; // Dark Teal
+      } else if (nutrientAmount <= 60) {
+        return { backgroundColor: "#2A9D8F", color: "white" }; // Dark Cyan
+      } else {
+        return { backgroundColor: "#E9C46A", color: "black" }; // Mustard
+      }
+    } else if (nutrientKey === "fat") {
+      if (nutrientAmount <= 5) {
+        return { backgroundColor: "#E9C46A", color: "black" }; // Mustard
+      } else if (nutrientAmount <= 20) {
+        return { backgroundColor: "#F4A261", color: "black" }; // Light Orange
+      } else {
+        return { backgroundColor: "#E76F51", color: "white" }; // Rust
+      }
+    }
+  };
+
   const addToMeal = async () => {
     try {
       if (foodDetails && mealTime) {
         // Fetch existing meals from storage
         const existingMeals = await AsyncStorage.getItem("addedMeals");
+        console.log("Existing meals from storage:", existingMeals);
         const meals = existingMeals ? JSON.parse(existingMeals) : {};
 
         // Add the new meal to the specific mealTime
@@ -59,16 +98,19 @@ const MealDetailsScreen = ({ route }) => {
 
         // Save the updated meals back to storage
         await AsyncStorage.setItem("addedMeals", JSON.stringify(meals));
-
+        console.log("Updated meals:", meals);
         // Update total calories in MainAppScreen
-        updateTotalCalories(meals);
+        if (route.params.updateTotalCalories) {
+          // Ensure updateTotalCalories is defined before calling it
+          route.params.updateTotalCalories(meals);
+        }
       }
     } catch (error) {
       console.error("Error saving added meals:", error);
     }
 
     // Navigate to the AddedMealsScreen
-    navigation.navigate("AddedMealsScreen");
+    navigation.navigate("AddedMealsScreen", { updateTotalCalories });
   };
 
   useEffect(() => {
@@ -81,26 +123,52 @@ const MealDetailsScreen = ({ route }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Food Details</Text>
       {foodDetails ? (
-        <>
-          <Text style={styles.title}>{foodDetails.description}</Text>
-          <Text style={styles.detailsColor}>{`Calories: ${getNutrientAmount(
-            "calories"
-          )} kcal`}</Text>
-          <Text style={styles.detailsColor}>{`Protein: ${getNutrientAmount(
-            "protein"
-          )} g`}</Text>
-          <Text style={styles.detailsColor}>{`Carbs: ${getNutrientAmount(
-            "carbohydrates"
-          )} g`}</Text>
-          <Text style={styles.detailsColor}>{`Fat: ${getNutrientAmount(
-            "fat"
-          )}`}</Text>
-          {/* Add more information as needed */}
-          <Button title="Add to Meal" onPress={addToMeal} />
-        </>
+        <View style={{ padding: 20 }}>
+          <Text style={styles.foodTitle}>{foodDetails.description}</Text>
+          <Text
+            style={[
+              styles.detailsColor,
+              { backgroundColor: getCalorieColor("calories").backgroundColor },
+            ]}
+          >
+            {`Calories: ${getNutrientAmount("calories")} kcal`}
+          </Text>
+          <Text
+            style={[
+              styles.detailsColor,
+              { backgroundColor: getCalorieColor("protein").backgroundColor },
+            ]}
+          >
+            {`Protein: ${getNutrientAmount("protein")} g`}
+          </Text>
+          <Text
+            style={[
+              styles.detailsColor,
+              {
+                backgroundColor:
+                  getCalorieColor("carbohydrates").backgroundColor,
+              },
+            ]}
+          >
+            {`Carbs: ${getNutrientAmount("carbohydrates")} g`}
+          </Text>
+          <Text
+            style={[
+              styles.detailsColor,
+              { backgroundColor: getCalorieColor("fat").backgroundColor },
+            ]}
+          >
+            {`Fat: ${getNutrientAmount("fat")}`}
+          </Text>
+        </View>
       ) : (
-        <Text>Loading...</Text>
+        <Text style={{ color: "white", textAlign: "center", fontSize: 20 }}>
+          Loading...
+        </Text>
       )}
+      <TouchableOpacity style={styles.addToMealButton} onPress={addToMeal}>
+        <Text style={styles.addToMealButtonText}>Add to Meal</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -118,9 +186,31 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "white",
   },
+  foodTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "white",
+    textAlign: "center",
+  },
   detailsColor: {
     fontSize: 20,
     color: "white",
+    padding: 15,
+  },
+  addToMealButton: {
+    backgroundColor: "white", // Use your preferred color
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignSelf: "center",
+    marginTop: 20,
+    borderWidth: 2,
+    borderColor: "red",
+  },
+  addToMealButtonText: {
+    color: "black",
+    fontSize: 18,
   },
 });
 
