@@ -9,8 +9,13 @@ import MealSelectionScreen from "./components/MealSelectionScreen";
 import MealDetailsScreen from "./components/MealDetailsScreen";
 import AddedMealsScreen from "./components/AddedMealsScreen";
 import Icon from 'react-native-vector-icons/Ionicons';
+import { LogBox } from "react-native";
 
 const Stack = createStackNavigator();
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state.",
+
+])
 
 const App = () => {
   const [userData, setUserData] = useState(null);

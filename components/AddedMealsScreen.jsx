@@ -1,4 +1,3 @@
-//Added meal screen
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -50,7 +49,6 @@ const AddedMealsScreen = ({ route }) => {
       parsedMeals[editMeal] = updatedMeals;
 
       await AsyncStorage.setItem("addedMeals", JSON.stringify(parsedMeals));
-
       // Update total calories in MainAppScreen for meal removal
     if (route.params.updateTotalCalories) {
       route.params.updateTotalCalories(parsedMeals, mealToRemove.nutrients?.calories || 0);
@@ -85,18 +83,22 @@ const AddedMealsScreen = ({ route }) => {
       {getSortedMealTimes(loadedMeals || {}).map((mealTime) => (
         <View key={mealTime}>
           <View style={styles.mealTimeContainer}>
-            <Text style={styles.mealTime}>{mealTime}</Text>
-            <TouchableOpacity onPress={() => handleAddMeal(mealTime)} style={styles.addButton}>
-              <Text style={styles.addText}>Add</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleToggleEditMealTime(mealTime)}
-              style={styles.editButton}
-            >
-              <Text style={styles.editButtonText}>
-                {editMeal === mealTime ? "Done" : "Edit"}
-              </Text>
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.mealTime}>{mealTime}</Text>
+            </View>
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity onPress={() => handleAddMeal(mealTime)} style={styles.addButton}>
+                <Text style={styles.addText}>Add</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleToggleEditMealTime(mealTime)}
+                style={styles.editButton}
+              >
+                <Text style={styles.editButtonText}>
+                  {editMeal === mealTime ? "Done" : "Edit"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
           {loadedMeals[mealTime].map((meal, mealIndex) => (
             <View key={mealIndex} style={styles.mealItemContainer}>
@@ -139,7 +141,7 @@ const AddedMealsScreen = ({ route }) => {
         </View>
       </Modal>
     </View>
-  );
+  );  
 };
 
 const styles = StyleSheet.create({
@@ -158,11 +160,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 10,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20
   },
   mealTime: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
     color: "white",
     marginTop: 25,
   },
@@ -174,13 +181,14 @@ const styles = StyleSheet.create({
   mealItem: {
     fontSize: 18,
     color: "white",
-    marginTop: 22
+    marginTop: 22,
   },
   editButton: {
     backgroundColor: "blue",
     padding: 8,
     borderRadius: 10,
     alignItems: "center",
+    marginLeft: 10,
   },
   editButtonText: {
     color: "white",
@@ -190,7 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     padding: 8,
     borderRadius: 10,
-    marginLeft: 150,
+    marginLeft: 10,
   },
   removeButton: {
     backgroundColor: "red",
@@ -200,13 +208,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   removeButtonText: {
     fontSize: 20,
     fontWeight: "bold",
     color: "white", 
-    marginTop: 2
+    marginTop: 2,
   },
   // Modal styles
   modalContainer: {

@@ -29,20 +29,27 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
       bmr,
       activityLevel
     );
-
-    storeUserDetails({
+  
+    const userDetails = {
       age,
       gender,
       height,
       weight,
       activityLevel,
       totalCalories,
-    });
-
-    await AsyncStorage.setItem("userDetails", JSON.stringify(userDetailData));
-
+    };
+  
+    // Check if any property is undefined before storing
+    if (Object.values(userDetails).every((prop) => prop !== undefined)) {
+      storeUserDetails(userDetails);
+  
+      // Store user details in AsyncStorage
+      await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
+    }
+  
     navigation.navigate("MainAppScreen", { totalCalories });
   };
+  
 
   return (
     <View style={styles.container}>
