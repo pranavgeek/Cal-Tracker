@@ -268,7 +268,7 @@ const AddedMealsScreen = ({ route }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Clear All Meals?</Text>
-            <Text>{`Are you sure you want to clear all meals?`}</Text>
+            <Text>{`Are you sure you want to delete all meals?`}</Text>
             <TouchableOpacity
               onPress={handleClearAllMeals}
               style={styles.confirmButton}
