@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Button } from "react";
+import { LogBox } from 'react-native';
 import { TouchableOpacity, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -9,13 +10,13 @@ import MealSelectionScreen from "./components/MealSelectionScreen";
 import MealDetailsScreen from "./components/MealDetailsScreen";
 import AddedMealsScreen from "./components/AddedMealsScreen";
 import Icon from 'react-native-vector-icons/Ionicons';
-import { LogBox } from "react-native";
+import Toast from "react-native-toast-message";
 
 const Stack = createStackNavigator();
-LogBox.ignoreLogs([
-  "Non-serializable values were found in the navigation state.",
 
-])
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -50,9 +51,8 @@ const App = () => {
           {userData ? (
             <Stack.Screen
               name="MainAppScreen"
-              options={{
+              options={({ navigation }) => ({
                 title: "CaloriesHunt",
-                headerLeft: null,
                 headerStyle: {
                   backgroundColor: "#FF8559",
                 },
@@ -60,8 +60,8 @@ const App = () => {
                   color: "white",
                   fontSize: 30,
                   marginLeft: -170,
-                },
-              }}
+                }
+              })}
               component={MainAppScreen}
               initialParams={userData}
             />
@@ -148,7 +148,9 @@ const App = () => {
               )
             })}
           />
+          {/* <Stack.Screen name="AppSettings" component={AppSettings} options={{ title: "Settings" }} /> */}
         </Stack.Navigator>
+        <Toast />
       </NavigationContainer>
   );
 };

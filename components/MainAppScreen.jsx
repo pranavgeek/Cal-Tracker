@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import MealSelectionScreen from "./MealSelectionScreen";
 import AddedMealsScreen from "./AddedMealsScreen";
-// import CalorieProgressBar from "./CalorieProgressBar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MainAppScreen = ({ route, navigation }) => {
@@ -40,6 +39,7 @@ const MainAppScreen = ({ route, navigation }) => {
         consumed += meal.nutrients?.calories || 0;
       });
     });
+    // consumed += replacedCalories;
     setConsumedCalories(Math.floor(consumed));
   };
 

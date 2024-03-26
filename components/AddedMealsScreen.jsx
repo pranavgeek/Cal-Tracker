@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const AddedMealsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -10,7 +12,9 @@ const AddedMealsScreen = ({ route }) => {
   const [editMeal, setEditMeal] = useState(null);
   const [confirmationModalVisible, setConfirmationModalVisible] =
     useState(false);
+  const [isClearAllModalVisible, setClearAllModalVisible] = useState(false);
   const [mealToRemove, setMealToRemove] = useState(null);
+  const [copiedMeals, setCopiedMeals] = useState(null);
 
   const loadMeals = async () => {
     try {
@@ -29,9 +33,20 @@ const AddedMealsScreen = ({ route }) => {
     }
   };
 
+
   // Function to handle toggling the edit state for a specific mealTime
   const handleToggleEditMealTime = (mealTime) => {
     setEditMeal((prev) => (prev === mealTime ? null : mealTime));
+  };
+
+  const showToast = (type, message) => {
+    Toast.show({
+      type: type,
+      position: 'bottom',
+      text1: message,
+      visibilityTime: 3000,
+      autoHide: true,
+    });
   };
 
   // Function to handle removing an individual meal
@@ -50,9 +65,12 @@ const AddedMealsScreen = ({ route }) => {
 
       await AsyncStorage.setItem("addedMeals", JSON.stringify(parsedMeals));
       // Update total calories in MainAppScreen for meal removal
-    if (route.params.updateTotalCalories) {
-      route.params.updateTotalCalories(parsedMeals, mealToRemove.nutrients?.calories || 0);
-    }
+      if (route.params.updateTotalCalories) {
+        route.params.updateTotalCalories(
+          parsedMeals,
+          mealToRemove.nutrients?.calories || 0
+        );
+      }
       setLoadedMeals(parsedMeals);
       setConfirmationModalVisible(false);
     } catch (error) {
@@ -69,9 +87,79 @@ const AddedMealsScreen = ({ route }) => {
 
   const getSortedMealTimes = (meals) => {
     const mealTimes = Object.keys(meals);
-    const order = ['Breakfast', 'Lunch', 'Dinner']; // Customize the order as needed
+    const order = ["Breakfast", "Lunch", "Dinner"]; // Customize the order as needed
     return mealTimes.sort((a, b) => order.indexOf(a) - order.indexOf(b));
   };
+
+   const handleCopyMeal = (mealTime) => {
+    setCopiedMeals(loadedMeals[mealTime]);
+    showToast('success', "Meals Copied.")
+  };
+
+  // Function to handle pasting meals to a specific meal time
+  const handlePasteMeal = async (mealTime) => {
+    if (copiedMeals) {
+      try {
+        const updatedMeals = { ...loadedMeals };
+        let replacedCalories = 0;
+  
+        // Calculate the total calories of the meals being replaced
+        Object.keys(updatedMeals).forEach((time) => {
+          if (time !== mealTime) {
+            updatedMeals[time].forEach((meal) => {
+              replacedCalories += meal.nutrients?.calories || 0;
+            });
+          }
+        });
+  
+        // Remove the meals being replaced from other meal times
+        Object.keys(updatedMeals).forEach((time) => {
+          if (time !== mealTime) {
+            updatedMeals[time] = updatedMeals[time].filter(
+              (meal) => !copiedMeals.includes(meal)
+            );
+          }
+        });
+  
+        updatedMeals[mealTime] = copiedMeals;
+  
+        await AsyncStorage.setItem("addedMeals", JSON.stringify(updatedMeals));
+  
+        setLoadedMeals(updatedMeals);
+        setCopiedMeals(null);
+        showToast('success', "Meals Pasted.")
+
+        // Update total calories on the MainAppScreen
+        updateTotalCalories(updatedMeals, replacedCalories);
+      } catch (error) {
+        console.error("Error pasting meal:", error);
+      }
+    }
+  };  
+  
+
+  const handleClearAllMeals = async () => {
+    try {
+
+      let consumed = 0;
+      Object.values(loadedMeals).forEach((mealArray) => {
+        mealArray.forEach((meal) => {
+          consumed += meal.nutrients?.calories || 0;
+        });
+      });
+
+      await AsyncStorage.removeItem("addedMeals");
+
+      if (route.params.updateTotalCalories) {
+        route.params.updateTotalCalories(consumed);
+      }
+
+      setLoadedMeals(null); 
+      setClearAllModalVisible(false);
+    } catch (error) {
+      console.error("Error clearing meals:", error);
+    }
+  };  
 
   useEffect(() => {
     loadMeals();
@@ -79,7 +167,19 @@ const AddedMealsScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Added Meals</Text>
+      <View style={styles.header}>
+      <Text style={styles.title}>
+        {loadedMeals ? "Added Meals" : "Yet No Meals Added"}
+      </Text>        
+      {loadedMeals && Object.keys(loadedMeals).length > 0 && (
+        <TouchableOpacity
+          style={[styles.button, styles.clearButton]}
+          onPress={() => setClearAllModalVisible(true)}
+        >
+          <Text style={styles.clearButtonText}>Delete All</Text>
+        </TouchableOpacity>
+      )}
+      </View>
       {getSortedMealTimes(loadedMeals || {}).map((mealTime) => (
         <View key={mealTime}>
           <View style={styles.mealTimeContainer}>
@@ -87,7 +187,10 @@ const AddedMealsScreen = ({ route }) => {
               <Text style={styles.mealTime}>{mealTime}</Text>
             </View>
             <View style={styles.buttonsContainer}>
-              <TouchableOpacity onPress={() => handleAddMeal(mealTime)} style={styles.addButton}>
+              <TouchableOpacity
+                onPress={() => handleAddMeal(mealTime)}
+                style={styles.addButton}
+              >
                 <Text style={styles.addText}>Add</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -97,6 +200,18 @@ const AddedMealsScreen = ({ route }) => {
                 <Text style={styles.editButtonText}>
                   {editMeal === mealTime ? "Done" : "Edit"}
                 </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleCopyMeal(mealTime)}
+                style={styles.iconButton}
+              >
+                <FontAwesome name="copy" size={20} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handlePasteMeal(mealTime)}
+                style={styles.iconButton}
+              >
+                <FontAwesome name="paste" size={20} color="white" />
               </TouchableOpacity>
             </View>
           </View>
@@ -128,7 +243,10 @@ const AddedMealsScreen = ({ route }) => {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Confirm Removal</Text>
             <Text>{`Are you sure you want to delete this ${mealToRemove?.name} ?`}</Text>
-            <TouchableOpacity onPress={handleConfirmRemove} style={styles.confirmButton}>
+            <TouchableOpacity
+              onPress={handleConfirmRemove}
+              style={styles.confirmButton}
+            >
               <Text style={styles.confirmButtonText}>Yes</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -140,8 +258,34 @@ const AddedMealsScreen = ({ route }) => {
           </View>
         </View>
       </Modal>
+      {/* Clear all meals */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isClearAllModalVisible}
+        onRequestClose={() => setClearAllModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Clear All Meals?</Text>
+            <Text>{`Are you sure you want to delete all meals?`}</Text>
+            <TouchableOpacity
+              onPress={handleClearAllMeals}
+              style={styles.confirmButton}
+            >
+              <Text style={styles.confirmButtonText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setClearAllModalVisible(false)}
+              style={styles.cancelButton}
+            >
+              <Text style={styles.cancelButtonText}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
-  );  
+  );
 };
 
 const styles = StyleSheet.create({
@@ -155,6 +299,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "white",
+    marginRight: 10,
   },
   mealTimeContainer: {
     flexDirection: "row",
@@ -165,7 +310,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   mealTime: {
     fontSize: 24,
@@ -200,6 +345,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft: 10,
   },
+  iconButton: {
+    padding: 8,
+    marginLeft: 10,
+  },
   removeButton: {
     backgroundColor: "red",
     height: 30,
@@ -213,8 +362,28 @@ const styles = StyleSheet.create({
   removeButtonText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "white", 
+    color: "white",
     marginTop: 2,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  clearButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: "red",
+    borderRadius: 5,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "bold",
   },
   // Modal styles
   modalContainer: {
