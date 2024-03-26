@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import RNPickerSelect from "react-native-picker-select";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CaloriesCalculator from "../Utility/CaloriesCalculator";
@@ -17,8 +18,54 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [activityLevel, setActivityLevel] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const calculateCalories = async () => {
+    setErrorMessage("");
+    // Input validation
+    if (!age && !gender && !height && !weight && !activityLevel) {
+      setErrorMessage("Please fill your personal information.");
+      return;
+    }
+
+    if (
+      isNaN(parseInt(age)) &&
+      isNaN(parseInt(height)) &&
+      isNaN(parseInt(weight))
+    ) {
+      setErrorMessage(
+        "Please enter valid numeric values for age, height, and weight."
+      );
+      return;
+    }
+
+    if (parseInt(age) <= 0 || parseInt(height) <= 0 || parseInt(weight) <= 0) {
+      setErrorMessage(
+        "Please enter positive values for age, height, and weight."
+      );
+      return;
+    }
+
+    if (!gender) {
+      setErrorMessage("Please select a gender.");
+      return;
+    }
+
+    if (!height || isNaN(height) || parseInt(height) <= 0) {
+      setErrorMessage("Please enter a valid height.");
+      return;
+    }
+
+    if (!weight || isNaN(weight) || parseInt(weight) <= 0) {
+      setErrorMessage("Please enter a valid weight.");
+      return;
+    }
+
+    if (!activityLevel) {
+      setErrorMessage("Please select an activity level.");
+      return;
+    }
+
     const bmr = CaloriesCalculator.calculateBMR(
       parseInt(age),
       gender,
@@ -29,7 +76,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
       bmr,
       activityLevel
     );
-  
+
     const userDetails = {
       age,
       gender,
@@ -38,18 +85,16 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
       activityLevel,
       totalCalories,
     };
-  
-    // Check if any property is undefined before storing
+
     if (Object.values(userDetails).every((prop) => prop !== undefined)) {
       storeUserDetails(userDetails);
-  
+
       // Store user details in AsyncStorage
       await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
     }
-  
+
     navigation.navigate("MainAppScreen", { totalCalories });
   };
-  
 
   return (
     <View style={styles.container}>
@@ -120,6 +165,13 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
         }}
       />
 
+      {errorMessage && (
+        <View style={styles.errorContainer}>
+          <MaterialIcons name="error-outline" size={24} color="red" />
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        </View>
+      )}
+
       <TouchableOpacity onPress={calculateCalories} style={styles.button}>
         <Text style={styles.buttonText}>Calculate Calories</Text>
       </TouchableOpacity>
@@ -133,7 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 50,
-    backgroundColor: '#000'
+    backgroundColor: "#000",
   },
   backgroundImage: {
     flex: 1,
@@ -147,7 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     color: "white",
   },
   inputLabel: {
@@ -192,6 +244,19 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     textAlign: "center",
+  },
+  errorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "red",
+    padding: 5,
+    borderRadius: 5,
+  },
+  errorMessage: {
+    marginLeft: 5,
+    color: "red",
+    fontSize: 14,
   },
 });
 

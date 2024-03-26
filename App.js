@@ -16,6 +16,7 @@ const Stack = createStackNavigator();
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
+  "The action 'REPLACE' with payload {'name':'UserInputScreen'} was not handled by any navigator.",
 ]);
 
 const App = () => {
