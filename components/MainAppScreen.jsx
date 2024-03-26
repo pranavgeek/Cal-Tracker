@@ -6,10 +6,9 @@ import {
   TouchableOpacity,
   Modal,
   StyleSheet,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native";
-import MealSelectionScreen from "./MealSelectionScreen";
-import AddedMealsScreen from "./AddedMealsScreen";
+import { DevSettings } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MainAppScreen = ({ route, navigation }) => {
@@ -51,6 +50,7 @@ const MainAppScreen = ({ route, navigation }) => {
     try {
       await AsyncStorage.removeItem("userDetails");
       navigation.replace("UserInputScreen");
+      DevSettings.reload();
     } catch (error) {
       console.error("Error clearing user details:", error);
     }

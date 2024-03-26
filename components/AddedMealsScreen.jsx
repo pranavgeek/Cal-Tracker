@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -180,6 +180,7 @@ const AddedMealsScreen = ({ route }) => {
         </TouchableOpacity>
       )}
       </View>
+      <ScrollView style={{ flex: 1 }}>
       {getSortedMealTimes(loadedMeals || {}).map((mealTime) => (
         <View key={mealTime}>
           <View style={styles.mealTimeContainer}>
@@ -232,6 +233,7 @@ const AddedMealsScreen = ({ route }) => {
           ))}
         </View>
       ))}
+      </ScrollView>
       {/* Confirmation Modal */}
       <Modal
         animationType="slide"

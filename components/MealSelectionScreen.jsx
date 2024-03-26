@@ -28,7 +28,17 @@ const MealSelectionScreen = ({ route }) => {
       const data = await response.json();
 
       if (data.foods) {
-        setSearchResults(data.foods);
+        const uniqueResults = [];
+        const seenDescriptions = new Set();
+        
+        data.foods.forEach((food) => {
+          if (!seenDescriptions.has(food.description)) {
+            seenDescriptions.add(food.description);
+            uniqueResults.push(food);
+          }
+        });
+  
+        setSearchResults(uniqueResults);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
