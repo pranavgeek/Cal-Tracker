@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -12,6 +12,7 @@ const AddedMealsScreen = ({ route }) => {
   const [editMeal, setEditMeal] = useState(null);
   const [confirmationModalVisible, setConfirmationModalVisible] =
     useState(false);
+  const { theme } = useTheme();
   const [isClearAllModalVisible, setClearAllModalVisible] = useState(false);
   const [mealToRemove, setMealToRemove] = useState(null);
   const [copiedMeals, setCopiedMeals] = useState(null);
@@ -39,9 +40,9 @@ const AddedMealsScreen = ({ route }) => {
     setEditMeal((prev) => (prev === mealTime ? null : mealTime));
   };
 
-  const showToast = (type, message) => {
+  const showToast = (message) => {
     Toast.show({
-      type: type,
+      type: 'success',
       position: 'bottom',
       text1: message,
       visibilityTime: 3000,
@@ -166,9 +167,9 @@ const AddedMealsScreen = ({ route }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <View style={styles.header}>
-      <Text style={styles.title}>
+      <Text style={[styles.title, {color: theme.color}]}>
         {loadedMeals ? "Added Meals" : "Yet No Meals Added"}
       </Text>        
       {loadedMeals && Object.keys(loadedMeals).length > 0 && (
@@ -180,12 +181,11 @@ const AddedMealsScreen = ({ route }) => {
         </TouchableOpacity>
       )}
       </View>
-      <ScrollView style={{ flex: 1 }}>
       {getSortedMealTimes(loadedMeals || {}).map((mealTime) => (
         <View key={mealTime}>
           <View style={styles.mealTimeContainer}>
             <View>
-              <Text style={styles.mealTime}>{mealTime}</Text>
+              <Text style={[styles.mealTime, {color: theme.color}]}>{mealTime}</Text>
             </View>
             <View style={styles.buttonsContainer}>
               <TouchableOpacity
@@ -204,21 +204,21 @@ const AddedMealsScreen = ({ route }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleCopyMeal(mealTime)}
-                style={styles.iconButton}
+                style={[styles.iconButton, {backgroundColor: theme.logoBackgroundColor}]}
               >
-                <FontAwesome name="copy" size={20} color="white" />
+                <FontAwesome name="copy" size={20} color={theme.logoColor} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handlePasteMeal(mealTime)}
-                style={styles.iconButton}
+                style={[styles.iconButton, {backgroundColor: theme.logoBackgroundColor}]}
               >
-                <FontAwesome name="paste" size={20} color="white" />
+                <FontAwesome name="paste" size={20} color={theme.logoColor} />
               </TouchableOpacity>
             </View>
           </View>
           {loadedMeals[mealTime].map((meal, mealIndex) => (
             <View key={mealIndex} style={styles.mealItemContainer}>
-              <Text style={styles.mealItem}>
+              <Text style={[styles.mealItem, {color: theme.color}]}>
                 {meal.name} - Calories: {meal.nutrients?.calories} kcal
               </Text>
               {editMeal === mealTime && (
@@ -233,7 +233,6 @@ const AddedMealsScreen = ({ route }) => {
           ))}
         </View>
       ))}
-      </ScrollView>
       {/* Confirmation Modal */}
       <Modal
         animationType="slide"
@@ -242,9 +241,9 @@ const AddedMealsScreen = ({ route }) => {
         onRequestClose={() => setConfirmationModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Confirm Removal</Text>
-            <Text>{`Are you sure you want to delete this ${mealToRemove?.name} ?`}</Text>
+          <View style={[styles.modalContent, {backgroundColor: theme.modalBackgroundColor}]}>
+            <Text style={[styles.modalTitle, {color: theme.modalColor}]}>Confirm Removal</Text>
+            <Text style={{color: theme.modalColor}}>{`Are you sure you want to delete this ${mealToRemove?.name} ?`}</Text>
             <TouchableOpacity
               onPress={handleConfirmRemove}
               style={styles.confirmButton}
@@ -268,9 +267,9 @@ const AddedMealsScreen = ({ route }) => {
         onRequestClose={() => setClearAllModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Clear All Meals?</Text>
-            <Text>{`Are you sure you want to delete all meals?`}</Text>
+          <View style={[styles.modalContent, {backgroundColor: theme.modalBackgroundColor}]}>
+            <Text style={[styles.modalTitle, {color: theme.modalColor}]}>Clear All Meals?</Text>
+            <Text style={{color: theme.modalColor}}>{`Are you sure you want to delete all meals?`}</Text>
             <TouchableOpacity
               onPress={handleClearAllMeals}
               style={styles.confirmButton}
@@ -295,12 +294,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 50,
-    backgroundColor: "#000",
+    backgroundColor: "#E3DDD3",
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "white",
+    color: "#000",
     marginRight: 10,
   },
   mealTimeContainer: {
@@ -317,7 +316,7 @@ const styles = StyleSheet.create({
   mealTime: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
+    color: "#000",
     marginTop: 25,
   },
   mealItemContainer: {
@@ -327,7 +326,7 @@ const styles = StyleSheet.create({
   },
   mealItem: {
     fontSize: 18,
-    color: "white",
+    color: "#000",
     marginTop: 22,
   },
   editButton: {
@@ -349,6 +348,8 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 8,
+    backgroundColor: "#000",
+    borderRadius: 10,
     marginLeft: 10,
   },
   removeButton: {
@@ -392,7 +393,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     backgroundColor: "#fff",
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cancelButton: {
-    backgroundColor: "#ccc",
+    backgroundColor: "red",
     padding: 10,
     borderRadius: 10,
     marginTop: 10,

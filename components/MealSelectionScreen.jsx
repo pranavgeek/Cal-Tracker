@@ -64,15 +64,15 @@ const MealSelectionScreen = ({ route }) => {
   const title = `Search for ${meal ? `${meal} items` : mealTime ? `${mealTime} items` : "items"}`;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
+      <Text style={[styles.title, {color: theme.color}]}>{title}</Text>
 
       <TextInput
         placeholder="Search for food..."
         placeholderTextColor="#999"
         value={searchQuery}
         onChangeText={(text) => setSearchQuery(text)}
-        style={styles.searchInput}
+        style={[styles.searchInput, {color: theme.color}]}
       />
       <FlatList
         data={searchResults}
@@ -82,8 +82,7 @@ const MealSelectionScreen = ({ route }) => {
             onPress={() => handleAddFood(item)}
             style={styles.resultItem}
           >
-            <Text style={styles.resultItemText}>{item.description}</Text>
-            {item.fdcId && <Text>Food ID: {item.fdcId}</Text>}
+            <Text style={[styles.resultItemText, {color: theme.color}]}>{item.description}</Text>
           </TouchableOpacity>
         )}
       />
@@ -96,17 +95,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 50,
-    backgroundColor: "#000",
+    backgroundColor: "#E3DDD3",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "white",
+    color: "#000",
   },
   searchInput: {
     height: 50,
-    color: "white",
+    color: "#000",
     fontSize: 20,
     borderColor: "#ccc",
     borderWidth: 1,
@@ -121,7 +120,7 @@ const styles = StyleSheet.create({
   },
   resultItemText: {
     fontSize: 18,
-    color: "white",
+    color: "#000",
   },
   modalContainer: {
     flex: 1,

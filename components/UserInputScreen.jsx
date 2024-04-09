@@ -86,6 +86,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
       totalCalories,
     };
 
+    // Check if any property is undefined before storing
     if (Object.values(userDetails).every((prop) => prop !== undefined)) {
       storeUserDetails(userDetails);
 
@@ -106,7 +107,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
         keyboardType="numeric"
         value={age}
         onChangeText={(text) => setAge(text)}
-        style={styles.input}
+        style={[styles.input, {color: theme.inputColor}]}
       />
 
       <Text style={styles.inputLabel}>What's your sex?</Text>
@@ -118,8 +119,8 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
           { label: "Female", value: "female" },
         ]}
         style={{
-          inputIOS: styles.input,
-          inputAndroid: styles.input,
+          inputIOS: [styles.input, {color: theme.inputColor}],
+          inputAndroid: [styles.input, {color: theme.inputColor}],
           iconContainer: {
             top: 10,
             right: 12,
@@ -133,7 +134,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
         keyboardType="numeric"
         value={height}
         onChangeText={(text) => setHeight(text)}
-        style={styles.input}
+        style={[styles.input, {color: theme.inputColor}]}
       />
 
       <Text style={styles.inputLabel}>What's your weight? (in kg):</Text>
@@ -142,7 +143,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
         keyboardType="numeric"
         value={weight}
         onChangeText={(text) => setWeight(text)}
-        style={styles.input}
+        style={[styles.input, {color: theme.inputColor}]}
       />
 
       <Text style={styles.inputLabel}>Activity Level:</Text>
@@ -156,8 +157,8 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
           { label: "Very Active", value: "veryActive" },
         ]}
         style={{
-          inputIOS: styles.input,
-          inputAndroid: styles.input,
+          inputIOS: [styles.input, {color: theme.inputColor}],
+          inputAndroid: [styles.input, {color: theme.inputColor}],
           iconContainer: {
             top: 10,
             right: 12,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 50,
-    backgroundColor: "#000",
+    backgroundColor: "#E3DDD3",
   },
   backgroundImage: {
     flex: 1,
@@ -200,11 +201,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     alignSelf: "flex-start",
-    color: "white",
+    color: "#000",
   },
   inputLabel: {
     fontSize: 16,
-    color: "white",
+    color: "#000",
     marginBottom: 5,
   },
   input: {
@@ -215,11 +216,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     width: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
   },
   pickerLabel: {
     fontSize: 16,
-    color: "white",
+    color: "#000",
     marginBottom: 5,
   },
   picker: {
@@ -235,13 +236,13 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: "#ff7f50",
+    backgroundColor: "#000",
     padding: 15,
     borderRadius: 50,
     marginTop: 20,
   },
   buttonText: {
-    color: "#000",
+    color: "#E3DDD3",
     fontSize: 16,
     textAlign: "center",
   },

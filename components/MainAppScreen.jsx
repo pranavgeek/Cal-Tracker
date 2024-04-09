@@ -1,14 +1,13 @@
 // components/MainAppScreen.js
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   Modal,
   StyleSheet,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
-import { DevSettings } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MainAppScreen = ({ route, navigation }) => {
@@ -50,24 +49,23 @@ const MainAppScreen = ({ route, navigation }) => {
     try {
       await AsyncStorage.removeItem("userDetails");
       navigation.replace("UserInputScreen");
-      DevSettings.reload();
     } catch (error) {
       console.error("Error clearing user details:", error);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.Nutrition}>Nutrition</Text>
-      <View style={styles.nutritionContainer}>
-        <Text style={styles.caloriesText}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
+      <Text style={[styles.Nutrition, {color: theme.color}]}>Nutrition</Text>
+      <View style={[styles.nutritionContainer, {backgroundColor: theme.nutritionContainer}]}>
+        <Text style={[styles.caloriesText, {color: theme.caloriesColor}]}>
           Eat up to {remainingCalories > 0 ? remainingCalories || removeMealCal : 0} cal
         </Text>
         <TouchableOpacity
           onPress={() => {
             toggleModal();
           }}
-          style={styles.addButton}
+          style={[styles.addButton, {backgroundColor: theme.backgroundColor}]}
         >
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
@@ -83,27 +81,27 @@ const MainAppScreen = ({ route, navigation }) => {
       >
         <TouchableWithoutFeedback onPress={toggleModal}>
           <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>
+            <View style={[styles.modalContent, {backgroundColor: theme.modalBackgroundColor}]}>
+              <Text style={[styles.modalTitle, {color: theme.modalColor}]}>
                 Select a Meal You Would Like to Track
               </Text>
               <TouchableOpacity
                 onPress={() => handleMealSelection("Breakfast")}
                 style={styles.menuItem}
               >
-                <Text style={styles.menuItemText}>Breakfast</Text>
+                <Text style={[styles.menuItemText, {color: theme.modalColor}]}>Breakfast</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleMealSelection("Lunch")}
                 style={styles.menuItem}
               >
-                <Text style={styles.menuItemText}>Lunch</Text>
+                <Text style={[styles.menuItemText, {color: theme.modalColor}]}>Lunch</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleMealSelection("Dinner")}
                 style={styles.menuItem}
               >
-                <Text style={styles.menuItemText}>Dinner</Text>
+                <Text style={[styles.menuItemText, {color: theme.modalColor}]}>Dinner</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -127,10 +125,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     paddingTop: 50,
-    backgroundColor: "#000",
+    backgroundColor: "#E3DDD3",
   },
   nutritionContainer: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#000",
     padding: 20,
     borderRadius: 20,
     flexDirection: "row",
@@ -141,11 +139,12 @@ const styles = StyleSheet.create({
   },
   caloriesText: {
     fontSize: 18,
+    color: "#E3DDD3"
   },
   addButton: {
     height: 50,
     width: 50,
-    backgroundColor: "#000000",
+    backgroundColor: "#E3DDD3",
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
@@ -155,15 +154,14 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#FF8559",
   },
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -172,6 +170,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 20,
+    color: '#E3DDD3'
   },
   menuItem: {
     paddingVertical: 10,
@@ -180,18 +179,19 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 18,
+    color: '#E3DDD3'
   },
   Nutrition: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
     alignSelf: "flex-start",
-    color: "white",
+    color: "#000",
   },
   viewMealsButton: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: "#FF8559",
+    backgroundColor: "#9E2A00",
     borderRadius: 10,
   },
   viewMealsButtonText: {

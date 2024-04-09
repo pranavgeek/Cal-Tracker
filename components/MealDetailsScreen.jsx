@@ -120,11 +120,11 @@ const MealDetailsScreen = ({ route }) => {
   }, [fdcId]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Food Details</Text>
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
+      <Text style={[styles.title, {color: theme.color}]}>Food Details</Text>
       {foodDetails ? (
         <View style={{ padding: 20 }}>
-          <Text style={styles.foodTitle}>{foodDetails.description}</Text>
+          <Text style={[styles.foodTitle, {color: theme.color}]}>{foodDetails.description}</Text>
           <Text
             style={[
               styles.detailsColor,
@@ -162,12 +162,12 @@ const MealDetailsScreen = ({ route }) => {
           </Text>
         </View>
       ) : (
-        <Text style={{ color: "white", textAlign: "center", fontSize: 20 }}>
+        <Text style={[{ color: "white", textAlign: "center", fontSize: 20 }, {color: theme.color}]}>
           Loading...
         </Text>
       )}
-      <TouchableOpacity style={styles.addToMealButton} onPress={addToMeal}>
-        <Text style={styles.addToMealButtonText}>Add to Meal</Text>
+      <TouchableOpacity style={[styles.addToMealButton, {backgroundColor: theme.btnBackgroundColor}]} onPress={addToMeal}>
+        <Text style={[styles.addToMealButtonText, {color: theme.btncolor}]}>Add to Meal</Text>
       </TouchableOpacity>
     </View>
   );
@@ -178,19 +178,19 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 50,
-    backgroundColor: "#000",
+    backgroundColor: "#E3DDD3",
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "white",
+    color: "#000",
   },
   foodTitle: {
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "white",
+    color: "#000",
     textAlign: "center",
   },
   detailsColor: {
@@ -199,17 +199,15 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   addToMealButton: {
-    backgroundColor: "white", // Use your preferred color
+    backgroundColor: "#000", 
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignSelf: "center",
     marginTop: 20,
-    borderWidth: 2,
-    borderColor: "red",
   },
   addToMealButtonText: {
-    color: "black",
+    color: "#E3DDD3",
     fontSize: 18,
   },
 });
