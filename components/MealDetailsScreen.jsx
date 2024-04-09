@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "../Utility/ThemeContext";
 
 const MealDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { fdcId, mealTime, updateTotalCalories } = route.params;
   const [foodDetails, setFoodDetails] = useState(null);
+  const { theme } = useTheme();
 
   const fetchFoodDetails = async () => {
     try {

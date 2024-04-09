@@ -8,12 +8,14 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "../Utility/ThemeContext";
 
 const MealSelectionScreen = ({ route }) => {
   const navigation = useNavigation();
   const { meal, mealTime, updateTotalCalories } = route.params;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const { theme } = useTheme();
 
   const USDA_API_KEY = "RnflfahJlR3tL4JQISfmMDWaqGRBZoLWZLt8Uada";
   const API_URL = "https://api.nal.usda.gov/fdc/v1/foods/";

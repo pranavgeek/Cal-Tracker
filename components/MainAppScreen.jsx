@@ -9,11 +9,14 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "../Utility/ThemeContext";
+
 
 const MainAppScreen = ({ route, navigation }) => {
   const { totalCalories } = route.params;
   const [isModalVisible, setModalVisible] = useState(false);
   const [consumedCalories, setConsumedCalories] = useState(0);
+  const { theme } = useTheme();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

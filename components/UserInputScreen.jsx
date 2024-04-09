@@ -11,6 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import RNPickerSelect from "react-native-picker-select";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CaloriesCalculator from "../Utility/CaloriesCalculator";
+import { useTheme } from "../Utility/ThemeContext";
 
 const UserInputScreen = ({ navigation, storeUserDetails }) => {
   const [age, setAge] = useState("");
@@ -19,7 +20,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
   const [weight, setWeight] = useState("");
   const [activityLevel, setActivityLevel] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
+  const { theme } = useTheme();
   const calculateCalories = async () => {
     setErrorMessage("");
     // Input validation

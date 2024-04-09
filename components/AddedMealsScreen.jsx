@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import { useTheme } from "../Utility/ThemeContext";
 
 const AddedMealsScreen = ({ route }) => {
   const navigation = useNavigation();

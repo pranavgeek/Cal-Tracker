@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useTheme } from "../Utility/ThemeContext";
 import * as Notifications from "expo-notifications";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
@@ -23,6 +24,7 @@ Notifications.setNotificationHandler({
 
 const AppSettings = () => {
   const navigation = useNavigation();
+  const { darkMode, toggleDarkMode, theme } = useTheme();
   const [showMealOptions, setShowMealOptions] = useState(false);
   const [mealReminders, setMealReminders] = useState({
     breakfast: null,
@@ -42,9 +44,9 @@ const AppSettings = () => {
   };
   
   const showNotificationToast = () => {
-    const formattedMealTimes = Object.entries(mealReminders)
-      .map(([meal, time]) => `${meal}: ${time.toLocaleTimeString()}`)
-      .join('\n');
+    // const formattedMealTimes = Object.entries(mealReminders)
+    //   .map(([meal, time]) => `${meal}: ${time.toLocaleTimeString()}`)
+    //   .join('\n');
 
     const toastMessage = `Meal times saved`;
     showToast(toastMessage);
@@ -81,6 +83,7 @@ const AppSettings = () => {
 
   const saveSettings = async () => {
     try {
+      // Convert Date objects to ISO strings before saving
       const remindersToSave = {
         mealReminderSwitch,
         mealReminders: {
@@ -110,7 +113,9 @@ const AppSettings = () => {
       const now = new Date();
       const triggerTime = new Date(mealTime);
   
+      // Check if trigger time has passed today
       if (triggerTime <= now) {
+        // Add a day to the trigger time if it's already passed
         triggerTime.setDate(triggerTime.getDate() + 2);
       }
   
@@ -147,8 +152,8 @@ const AppSettings = () => {
           hour: triggerTime.getHours(),
           minute: triggerTime.getMinutes(),
           repeats: true,
-          channelId: 'default',
-          intervalMs: 24 * 60 * 60 * 1000,
+          channelId: 'default', // Specify channelId if needed
+          intervalMs: 24 * 60 * 60 * 1000, // Repeat interval in milliseconds (e.g., every 24 hours)
         },
       });
   
@@ -232,6 +237,16 @@ const AppSettings = () => {
       style={[styles.container, { backgroundColor: theme.backgroundColor }]}
     >
       <Text style={[styles.heading, { color: theme.color }]}>Settings</Text>
+
+      <View style={styles.setting}>
+        <Text style={[styles.label, { color: theme.color }]}>Dark Mode</Text>
+        <Switch
+          value={darkMode}
+          onValueChange={toggleDarkMode}
+          trackColor={{ false: "#767577", true: "#FF8559" }}
+          thumbColor={darkMode ? "#9E2A00" : "#f4f3f4"}
+        />
+      </View>
 
       <View style={styles.setting}>
         <Text style={[styles.label, { color: theme.color }]}>

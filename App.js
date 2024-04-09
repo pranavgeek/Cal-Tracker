@@ -12,6 +12,7 @@ import AddedMealsScreen from "./components/AddedMealsScreen";
 import AppSettings from "./components/AppSettings";
 import Icon from "react-native-vector-icons/Ionicons";
 import Toast from "react-native-toast-message";
+import { ThemeProvider } from "./Utility/ThemeContext";
 
 const Stack = createStackNavigator();
 
@@ -47,6 +48,7 @@ const App = () => {
   };
 
   return (
+   <ThemeProvider> 
     <NavigationContainer>
       <Stack.Navigator>
         {userData ? (
@@ -226,6 +228,7 @@ const App = () => {
       </Stack.Navigator>
       <Toast />
     </NavigationContainer>
+    </ThemeProvider>
   );
 };
 
