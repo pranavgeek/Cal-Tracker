@@ -107,6 +107,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
         placeholder="Enter your age"
         keyboardType="numeric"
         value={age}
+        placeholderTextColor="white"
         onChangeText={(text) => setAge(text)}
         style={[styles.input, {color: theme.inputColor}]}
       />
@@ -133,6 +134,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
       <TextInput
         placeholder="Enter your height"
         keyboardType="numeric"
+        placeholderTextColor="white"
         value={height}
         onChangeText={(text) => setHeight(text)}
         style={[styles.input, {color: theme.inputColor}]}
@@ -142,6 +144,7 @@ const UserInputScreen = ({ navigation, storeUserDetails }) => {
       <TextInput
         placeholder="Enter your weight"
         keyboardType="numeric"
+        placeholderTextColor="white"
         value={weight}
         onChangeText={(text) => setWeight(text)}
         style={[styles.input, {color: theme.inputColor}]}
@@ -237,7 +240,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: "#000",
+    backgroundColor: "#9E2A00",
     padding: 15,
     borderRadius: 50,
     marginTop: 20,

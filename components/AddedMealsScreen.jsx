@@ -41,9 +41,9 @@ const AddedMealsScreen = ({ route }) => {
     setEditMeal((prev) => (prev === mealTime ? null : mealTime));
   };
 
-  const showToast = (message) => {
+  const showToast = (type, message) => {
     Toast.show({
-      type: 'success',
+      type: type,
       position: 'bottom',
       text1: message,
       visibilityTime: 3000,
